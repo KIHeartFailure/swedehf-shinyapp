@@ -25,6 +25,13 @@ ui <- fluidPage(
         multiple = TRUE
       ),
       selectInput(
+        inputId = "prevhfh6mo",
+        label = "HF hospitalization < 6 months:",
+        choices = appvar_values$shf_sos_prevhfh6mo,
+        selected = appvar_values$shf_sos_prevhfh6mo,
+        multiple = TRUE
+      ),
+      selectInput(
         inputId = "nyha",
         label = "NYHA class:",
         choices = appvar_values$shf_nyha,
@@ -58,7 +65,7 @@ ui <- fluidPage(
         choices = appvar_values$shf_bpsys,
         selected = appvar_values$shf_bpsys,
         multiple = TRUE
-      ) 
+      )
     ),
     # Main panel for displaying outputs ----
     mainPanel(
@@ -109,26 +116,31 @@ server <- function(input, output) {
   select_func2 <- reactive({
     select_func(
       ef = input$ef,
+      prevhfh6mo = input$prevhfh6mo,
       nyha = input$nyha,
       af = input$af,
       gfrckdepi = input$gfrckdepi,
       ntprobnp = input$ntprobnp,
-      bpsys = input$bpsys 
+      bpsys = input$bpsys
     )
   })
 
   output$selected_ef2 <- renderText({
     if (select_func2() == 0) {
-      checkempty <- c(is.null(input$ef), is.null(input$nyha), is.null(input$af), is.null(input$gfrckdepi), is.null(input$ntprobnp), is.null(input$bpsys))
-      labs <- c("Ejection Fraction", "NYHA class", "Atrial Fibrillation", "eGFR", "NT-proBNP", "Systolic blood pressure")
-      paste0("<br /><font color=\"#FF0000\"><b>Please select at least one value for ", paste0(labs[checkempty], collapse = " and "),"</b></font>")
+      checkempty <- c(is.null(input$ef), is.null(input$prevhfh6mo), is.null(input$nyha), is.null(input$af), is.null(input$gfrckdepi), is.null(input$ntprobnp), is.null(input$bpsys))
+      labs <- c("Ejection Fraction", "HF hospitalization", "NYHA class", "Atrial Fibrillation", "eGFR", "NT-proBNP", "Systolic blood pressure")
+      paste0("<br /><font color=\"#FF0000\"><b>Please select at least one value for ", paste0(labs[checkempty], collapse = " and "), "</b></font>")
     } else if (select_func2() == -1) {
-      checkad <- c("Ejection Fraction"[diff(sort(as.numeric(input$ef))) > 1], "NYHA class"[diff(sort(as.numeric(input$nyha))) > 1], 
-                   "Atrial Fibrillation"[diff(sort(as.numeric(input$af))) > 1], 
-                   "eGFR"[diff(sort(as.numeric(input$gfrckdepi))) > 1], 
-                   "NT-proBNP"[diff(sort(as.numeric(input$ntprobnp))) > 1], "Systolic blood pressure"[diff(sort(as.numeric(input$bpsys))) > 1])
-      paste0("<br /><font color=\"#FF0000\"><b>All selected categories need to be numerically ajoining for ", paste0(checkad, collapse = " and "),"</b></font>")
-      } else {
+      checkad <- c(
+        "Ejection Fraction"[diff(sort(as.numeric(input$ef))) > 1],
+        "HF hospitalization"[diff(sort(as.numeric(input$prevhfh6mo))) > 1],
+        "NYHA class"[diff(sort(as.numeric(input$nyha))) > 1],
+        "Atrial Fibrillation"[diff(sort(as.numeric(input$af))) > 1],
+        "eGFR"[diff(sort(as.numeric(input$gfrckdepi))) > 1],
+        "NT-proBNP"[diff(sort(as.numeric(input$ntprobnp))) > 1], "Systolic blood pressure"[diff(sort(as.numeric(input$bpsys))) > 1]
+      )
+      paste0("<br /><font color=\"#FF0000\"><b>All selected categories need to be numerically ajoining for ", paste0(checkad, collapse = " and "), "</b></font>")
+    } else {
       paste0("For patients with EF ", paste0(names(appvar_values$shf_ef)[appvar_values$shf_ef %in% input$ef], collapse = ", "), "%")
     }
   })
