@@ -121,13 +121,13 @@ server <- function(input, output) {
     if (select_func2() == 0) {
       checkempty <- c(is.null(input$ef), is.null(input$nyha), is.null(input$af), is.null(input$gfrckdepi), is.null(input$ntprobnp), is.null(input$bpsys))
       labs <- c("Ejection Fraction", "NYHA class", "Atrial Fibrillation", "eGFR", "NT-proBNP", "Systolic blood pressure")
-      paste0("<font color=\"#FF0000\"><b>Please select at least one value for ", paste0(labs[checkempty], collapse = " and "),"</b></font>")
+      paste0("<br /><font color=\"#FF0000\"><b>Please select at least one value for ", paste0(labs[checkempty], collapse = " and "),"</b></font>")
     } else if (select_func2() == -1) {
       checkad <- c("Ejection Fraction"[diff(sort(as.numeric(input$ef))) > 1], "NYHA class"[diff(sort(as.numeric(input$nyha))) > 1], 
                    "Atrial Fibrillation"[diff(sort(as.numeric(input$af))) > 1], 
                    "eGFR"[diff(sort(as.numeric(input$gfrckdepi))) > 1], 
                    "NT-proBNP"[diff(sort(as.numeric(input$ntprobnp))) > 1], "Systolic blood pressure"[diff(sort(as.numeric(input$bpsys))) > 1])
-      paste0("<font color=\"#FF0000\"><b>All selected categories need to be numerically ajoining for ", paste0(checkad, collapse = " and "),"</b></font>")
+      paste0("<br /><font color=\"#FF0000\"><b>All selected categories need to be numerically ajoining for ", paste0(checkad, collapse = " and "),"</b></font>")
       } else {
       paste0("For patients with EF ", paste0(names(appvar_values$shf_ef)[appvar_values$shf_ef %in% input$ef], collapse = ", "), "%")
     }
