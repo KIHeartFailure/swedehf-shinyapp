@@ -65,7 +65,9 @@ ui <- fluidPage(
         choices = appvar_values$shf_bpsys,
         selected = appvar_values$shf_bpsys,
         multiple = TRUE
-      )
+      ),
+      br(),
+      actionButton("display", "Display result"),
     ),
     # Main panel for displaying outputs ----
     mainPanel(
@@ -113,7 +115,7 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
-  select_func2 <- reactive({
+  select_func2 <- eventReactive(input$display, {
     select_func(
       ef = input$ef,
       prevhfh6mo = input$prevhfh6mo,
