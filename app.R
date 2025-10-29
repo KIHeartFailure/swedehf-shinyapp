@@ -127,7 +127,7 @@ server <- function(input, output) {
     )
   })
 
-  output$selected_ef2 <- renderText({
+  text_func <- eventReactive(input$display, {
     if (select_func2() == 0) {
       checkempty <- c(is.null(input$ef), is.null(input$prevhfh6mo), is.null(input$nyha), is.null(input$af), is.null(input$gfrckdepi), is.null(input$ntprobnp), is.null(input$bpsys))
       labs <- c("Ejection Fraction", "HF hospitalization", "NYHA class", "Atrial Fibrillation", "eGFR", "NT-proBNP", "Systolic blood pressure")
@@ -143,9 +143,13 @@ server <- function(input, output) {
         "Systolic blood pressure"[any(diff(sort(as.numeric(input$bpsys))) > 1)]
       )
       paste0("<br /><font color=\"#FF0000\"><b>All selected categories need to be numerically ajoining for ", paste0(checkad, collapse = " and "), "</b></font>")
-    } else {
-      paste0("For patients with EF ", paste0(names(appvar_values$shf_ef)[appvar_values$shf_ef %in% input$ef], collapse = ", "), "%")
+    } else if (!select_func2() %in% c(0, -1)) {
+      paste0("<br <b>For patients with EF ", paste0(names(appvar_values$shf_ef)[appvar_values$shf_ef %in% input$ef], collapse = ", "), "%</b>")
     }
+  })
+
+  output$selected_ef2 <- renderText({
+    text_func()
   })
 
   output$selected_ef1 <- renderText({
