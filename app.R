@@ -103,14 +103,12 @@ ui <- fluidPage(
           value = "Information",
           icon = icon("info"),
           br(),
-<<<<<<< HEAD
           p("The displayed information is the last registration / patient in the Swedish Heart Failure Registry (SwedeHF) 2016-2023 with NYHA class II, III or IV and discharged alive from hospital (N = 46,636)."),
           br(),
           p("The outcomes were derived from the National Patient register (hospitalizations) and The Cause of Death Register (deaths). HF was defined as ICD-10 I110, I130, I132, I255, I420, I423, I425-9, I43, I50, J81, K761, R570 and CV as I, J81, K761, R570, G45."),
           br(),
-=======
           p("The displayed information is the last registration / patient in the Swedish Heart Failure Registry (SwedeHF) 2016-2023 with NYHA class II, III or IV and discharged alive from hospital."),
->>>>>>> 6cebe37d9cce3c29867889ec3c3b08c5b6cdeab8
+          br(),
           p("Missing values are imputed with a multivariate imputation algorithm based on random forests (Mayer M (2024). _missRanger: Fast Imputation of Missing Values_. doi:10.32614/CRAN.package.missRanger")
         )
       )
