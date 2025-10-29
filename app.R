@@ -65,9 +65,9 @@ ui <- fluidPage(
         choices = appvar_values$shf_bpsys,
         selected = appvar_values$shf_bpsys,
         multiple = TRUE
-      ),
-      br(),
-      actionButton("display", "Display result"),
+      )#,
+      #br(),
+      #actionButton("display", "Display result"),
     ),
     # Main panel for displaying outputs ----
     mainPanel(
@@ -115,7 +115,18 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
-  select_func2 <- eventReactive(input$display, {
+  #select_func2 <- eventReactive(input$display, {
+  #  select_func(
+  ##    ef = input$ef,
+  #    prevhfh6mo = input$prevhfh6mo,
+  #    nyha = input$nyha,
+  ##    af = input$af,
+  #    gfrckdepi = input$gfrckdepi,
+  #    ntprobnp = input$ntprobnp,
+  #    bpsys = input$bpsys
+  #  )
+  #})
+  select_func2 <- reactive({
     select_func(
       ef = input$ef,
       prevhfh6mo = input$prevhfh6mo,
@@ -126,8 +137,12 @@ server <- function(input, output) {
       bpsys = input$bpsys
     )
   })
+  
+  #text_func <- eventReactive(input$display, {
+  # 
+  #})
 
-  text_func <- eventReactive(input$display, {
+  output$selected_ef2 <- renderText({
     if (select_func2() == 0) {
       checkempty <- c(is.null(input$ef), is.null(input$prevhfh6mo), is.null(input$nyha), is.null(input$af), is.null(input$gfrckdepi), is.null(input$ntprobnp), is.null(input$bpsys))
       labs <- c("Ejection Fraction", "HF hospitalization", "NYHA class", "Atrial Fibrillation", "eGFR", "NT-proBNP", "Systolic blood pressure")
@@ -145,11 +160,7 @@ server <- function(input, output) {
       paste0("<br /><font color=\"#FF0000\"><b>All selected categories need to be numerically ajoining for ", paste0(checkad, collapse = " and "), "</b></font>")
     } else if (!select_func2() %in% c(0, -1)) {
       paste0("<br <b>For patients with EF ", paste0(names(appvar_values$shf_ef)[appvar_values$shf_ef %in% input$ef], collapse = ", "), "%</b>")
-    }
-  })
-
-  output$selected_ef2 <- renderText({
-    text_func()
+    } 
   })
 
   output$selected_ef1 <- renderText({
