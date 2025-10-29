@@ -11,7 +11,7 @@ ui <- fluidPage(
   # theme = bs_theme(preset = "bootstrap"),
   theme = shinytheme("spacelab"),
   # App title ----
-  titlePanel("Eligibility and event rates - Swedish Heart Failure Registry"),
+  titlePanel("Eligibility and event rates - SwedeHF"),
 
   # Sidebar layout with input and output definitions ----
   sidebarLayout(
@@ -65,9 +65,7 @@ ui <- fluidPage(
         choices = appvar_values$shf_bpsys,
         selected = appvar_values$shf_bpsys,
         multiple = TRUE
-      )#,
-      #br(),
-      #actionButton("display", "Display result"),
+      )
     ),
     # Main panel for displaying outputs ----
     mainPanel(
@@ -105,9 +103,11 @@ ui <- fluidPage(
           value = "Information",
           icon = icon("info"),
           br(),
-          p("ICD codes, information SwedeHF XYZ 2016-2023 with NYHA class II, III or IV"),
-          p("Imputation XYXY"),
-          p("Reference XXX")
+          p("The displayed information is the last registration / patient in the Swedish Heart Failure Registry (SwedeHF) 2016-2023 with NYHA class II, III or IV and discharged alive from hospital (N = 46,636)."),
+          br(),
+          p("The outcomes were derived from the National Patient register (hospitalizations) and The Cause of Death Register (deaths). HF was defined as ICD-10 I110, I130, I132, I255, I420, I423, I425-9, I43, I50, J81, K761, R570 and CV as I, J81, K761, R570, G45."),
+          br(),
+          p("Missing values are imputed with a multivariate imputation algorithm based on random forests (Mayer M (2024). _missRanger: Fast Imputation of Missing Values_. doi:10.32614/CRAN.package.missRanger")
         )
       )
     )
@@ -115,17 +115,6 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
-  #select_func2 <- eventReactive(input$display, {
-  #  select_func(
-  ##    ef = input$ef,
-  #    prevhfh6mo = input$prevhfh6mo,
-  #    nyha = input$nyha,
-  ##    af = input$af,
-  #    gfrckdepi = input$gfrckdepi,
-  #    ntprobnp = input$ntprobnp,
-  #    bpsys = input$bpsys
-  #  )
-  #})
   select_func2 <- reactive({
     select_func(
       ef = input$ef,
@@ -137,10 +126,6 @@ server <- function(input, output) {
       bpsys = input$bpsys
     )
   })
-  
-  #text_func <- eventReactive(input$display, {
-  # 
-  #})
 
   output$selected_ef2 <- renderText({
     if (select_func2() == 0) {
@@ -154,13 +139,13 @@ server <- function(input, output) {
         "NYHA class"[any(diff(sort(as.numeric(input$nyha))) > 1)],
         "Atrial Fibrillation"[any(diff(sort(as.numeric(input$af))) > 1)],
         "eGFR"[any(diff(sort(as.numeric(input$gfrckdepi))) > 1)],
-        "NT-proBNP"[any(diff(sort(as.numeric(input$ntprobnp))) > 1)], 
+        "NT-proBNP"[any(diff(sort(as.numeric(input$ntprobnp))) > 1)],
         "Systolic blood pressure"[any(diff(sort(as.numeric(input$bpsys))) > 1)]
       )
       paste0("<br /><font color=\"#FF0000\"><b>All selected categories need to be numerically ajoining for ", paste0(checkad, collapse = " and "), "</b></font>")
     } else if (!select_func2() %in% c(0, -1)) {
       paste0("<br <b>For patients with EF ", paste0(names(appvar_values$shf_ef)[appvar_values$shf_ef %in% input$ef], collapse = ", "), "%</b>")
-    } 
+    }
   })
 
   output$selected_ef1 <- renderText({
