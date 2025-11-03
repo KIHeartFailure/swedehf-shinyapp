@@ -213,6 +213,7 @@ server <- function(input, output) {
       DT::datatable(
         rate[[select_func2()]] %>%
           filter(outname %in% c(input$out)) %>%
+          arrange(outname, time) %>%
           select(-rate_0, -rate_1),
         extensions = "Buttons",
         options = list(
