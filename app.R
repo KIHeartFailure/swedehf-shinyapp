@@ -33,25 +33,26 @@ ui <- page_sidebar(
         multiple = TRUE
       ),
       selectInput(
-        inputId = "af",
-        label = "Atrial fibrillation",
-        choices = appvar_values$shf_sos_com_af,
-        selected = appvar_values$shf_sos_com_af,
-        multiple = TRUE
-      ),
-      selectInput(
         inputId = "gfrckdepi",
         label = "eGFR (mL/min/1.73 m²)",
         choices = appvar_values$shf_gfrckdepi,
         selected = appvar_values$shf_gfrckdepi,
         multiple = TRUE
       ),
-      selectInput(
-        inputId = "ntprobnp",
-        label = "NT-proBNP (pg/mL)",
-        choices = appvar_values$shf_ntprobnp,
-        selected = appvar_values$shf_ntprobnp,
-        multiple = TRUE
+      checkboxInput("ntprobnp_af", "Separate NT-proBNP by atrial fibrillation"),
+      conditionalPanel(
+        condition = "input.ntprobnp_af == true",
+        p(HTML("NT-proBNP (pg/mL) <b>with</b> atrial fibrillation > 900<br>NT-proBNP (pg/mL) <b>without</b> atrial fibrillation > 300")),
+      ),
+      conditionalPanel(
+        condition = "input.ntprobnp_af == false",
+        selectInput(
+          inputId = "ntprobnp",
+          label = "NT-proBNP (pg/mL)",
+          choices = appvar_values$shf_ntprobnp,
+          selected = appvar_values$shf_ntprobnp,
+          multiple = TRUE
+        )
       ),
       selectInput(
         inputId = "bpsys",
@@ -86,14 +87,13 @@ ui <- page_sidebar(
         showcase = bsicons::bs_icon("people-fill"),
         theme = "bg-primary"
       ),
-      # card(
-      DT::dataTableOutput(outputId = "base"),
-      padding = 0
-      # )
-      ,
-      # card(
-      DT::dataTableOutput(outputId = "event")
-      # )
+      card(
+        DT::dataTableOutput(outputId = "base"),
+        padding = 0
+      ),
+      card(
+        DT::dataTableOutput(outputId = "event")
+      )
       # )
     ),
     nav_panel(
@@ -115,32 +115,31 @@ ui <- page_sidebar(
   )
 )
 
-
 server <- function(input, output) {
+  show_modal_spinner()
+  Sys.sleep(1.5)
+  remove_modal_spinner()
   select_func2 <- reactive({
     select_func(
       ef = input$ef,
       prevhfh6mo = input$prevhfh6mo,
       nyha = input$nyha,
-      af = input$af,
       gfrckdepi = input$gfrckdepi,
       ntprobnp = input$ntprobnp,
+      ntprobnp_af = input$ntprobnp_af,
       bpsys = input$bpsys
     )
   })
 
   output$error <- renderText({
     if (select_func2() == 0) {
-      checkempty <- c(is.null(input$ef), is.null(input$prevhfh6mo), is.null(input$nyha), is.null(input$af), is.null(input$gfrckdepi), is.null(input$ntprobnp), is.null(input$bpsys))
-      labs <- c("Ejection Fraction", "HF hospitalization", "NYHA class", "Atrial Fibrillation", "eGFR", "NT-proBNP", "Systolic blood pressure")
+      checkempty <- c(is.null(input$ef), is.null(input$prevhfh6mo), is.null(input$nyha), is.null(input$gfrckdepi), is.null(input$ntprobnp), is.null(input$bpsys))
+      labs <- c("Ejection Fraction", "HF hospitalization", "NYHA class", "eGFR", "NT-proBNP", "Systolic blood pressure")
       paste0("<font color=\"#FF0000\"><b>Select at least one value for ", paste0(labs[checkempty], collapse = " and "), "</b></font>")
     } else if (select_func2() == -1) {
       checkad <- c(
         "Ejection Fraction"[any(diff(sort(as.numeric(input$ef))) > 1)],
-        "HF hospitalization"[any(diff(sort(as.numeric(input$prevhfh6mo))) > 1)],
         "NYHA class"[any(diff(sort(as.numeric(input$nyha))) > 1)],
-        "Atrial Fibrillation"[any(diff(sort(as.numeric(input$af))) > 1)],
-        "eGFR"[any(diff(sort(as.numeric(input$gfrckdepi))) > 1)],
         "NT-proBNP"[any(diff(sort(as.numeric(input$ntprobnp))) > 1)],
         "Systolic blood pressure"[any(diff(sort(as.numeric(input$bpsys))) > 1)]
       )
@@ -152,16 +151,13 @@ server <- function(input, output) {
 
   output$error2 <- renderText({
     if (select_func2() == 0 | is.null(input$out)) {
-      checkempty <- c(is.null(input$ef), is.null(input$prevhfh6mo), is.null(input$nyha), is.null(input$af), is.null(input$gfrckdepi), is.null(input$ntprobnp), is.null(input$bpsys), is.null(input$out))
-      labs <- c("Ejection Fraction", "HF hospitalization", "NYHA class", "Atrial Fibrillation", "eGFR", "NT-proBNP", "Systolic blood pressure", "Outcome")
+      checkempty <- c(is.null(input$ef), is.null(input$prevhfh6mo), is.null(input$nyha), is.null(input$gfrckdepi), is.null(input$ntprobnp), is.null(input$bpsys), is.null(input$out))
+      labs <- c("Ejection Fraction", "HF hospitalization", "NYHA class", "eGFR", "NT-proBNP", "Systolic blood pressure", "Event type")
       paste0("<font color=\"#FF0000\"><b>Select at least one value for ", paste0(labs[checkempty], collapse = " and "), "</b></font>")
     } else if (select_func2() == -1) {
       checkad <- c(
         "Ejection Fraction"[any(diff(sort(as.numeric(input$ef))) > 1)],
-        "HF hospitalization"[any(diff(sort(as.numeric(input$prevhfh6mo))) > 1)],
         "NYHA class"[any(diff(sort(as.numeric(input$nyha))) > 1)],
-        "Atrial Fibrillation"[any(diff(sort(as.numeric(input$af))) > 1)],
-        "eGFR"[any(diff(sort(as.numeric(input$gfrckdepi))) > 1)],
         "NT-proBNP"[any(diff(sort(as.numeric(input$ntprobnp))) > 1)],
         "Systolic blood pressure"[any(diff(sort(as.numeric(input$bpsys))) > 1)]
       )
