@@ -117,7 +117,7 @@ ui <- page_sidebar(
 
 server <- function(input, output) {
   show_modal_spinner()
-  Sys.sleep(2)
+  Sys.sleep(3)
   remove_modal_spinner()
   select_func2 <- reactive({
     select_func(
