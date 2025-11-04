@@ -2150,6 +2150,37 @@
         "Built": "R 4.5.1; ; 2025-08-20 02:27:34 UTC; windows"
       }
     },
+    "shinybusy": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "shinybusy",
+        "Title": "Busy Indicators and Notifications for 'Shiny' Applications",
+        "Version": "0.3.3",
+        "Authors@R": "c(person(\"Fanny\", \"Meyer\", role = \"aut\"),\n  person(\"Victor\", \"Perrier\", email = \"victor.perrier@dreamrs.fr\", role = c(\"aut\", \"cre\")),\n  person(\"Silex Technologies\", comment = \"https://www.silex-ip.com\", role = \"fnd\"))",
+        "Description": "Add indicators (spinner, progress bar, gif) in your 'shiny'\n  applications to show the user that the server is busy. And other tools to let\n  your users know something is happening (send notifications, reports, ...).",
+        "License": "GPL-3",
+        "Encoding": "UTF-8",
+        "Imports": "htmltools, shiny, jsonlite, htmlwidgets",
+        "RoxygenNote": "7.3.1",
+        "URL": "https://github.com/dreamRs/shinybusy,\nhttps://dreamrs.github.io/shinybusy/",
+        "BugReports": "https://github.com/dreamRs/shinybusy/issues",
+        "Suggests": "testthat, covr, knitr, rmarkdown",
+        "VignetteBuilder": "knitr",
+        "NeedsCompilation": "no",
+        "Packaged": "2024-03-09 10:44:38 UTC; perri",
+        "Author": "Fanny Meyer [aut],\n  Victor Perrier [aut, cre],\n  Silex Technologies [fnd] (https://www.silex-ip.com)",
+        "Maintainer": "Victor Perrier <victor.perrier@dreamrs.fr>",
+        "Repository": "CRAN",
+        "Date/Publication": "2024-03-09 11:20:02 UTC",
+        "Built": "R 4.5.2; ; 2025-11-01 02:39:41 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "shinybusy",
+        "RemoteRef": "shinybusy",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteSha": "0.3.3"
+      }
+    },
     "shinytest2": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -2792,13 +2823,13 @@
   },
   "files": {
     "app.R": {
-      "checksum": "8bcaf79d2260818998449a674a0d6caa"
+      "checksum": "cec6dfe524720268788b9aef819cfeba"
     },
     "data/shinydata.RData": {
-      "checksum": "f06aad240b776b7ae2079512b6bd8a06"
+      "checksum": "a805490e12ae830faf4e350802ebd54c"
     },
     "setup.R": {
-      "checksum": "7631515c0347d6b43755fd636e7abcdc"
+      "checksum": "ad3ab9fb0b2f5adf7af7c4e0d4ad7de9"
     },
     "test.R": {
       "checksum": "8a9fa2b28078fe836b71f38f4d2d4660"
