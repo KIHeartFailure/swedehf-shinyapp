@@ -1,7 +1,7 @@
 source("setup.R")
 
 ui <- page_sidebar(
-  title = h4("Eligibility and event rates - SwedeHF"),
+  title = h4(tags$img(src = "logo.jpg", width = "75px"), "KI-App: a tool for defining selection criteria for RCTs in heart failure"),
   theme = mytheme,
   sidebar = sidebar(
     width = "30%",
@@ -39,11 +39,6 @@ ui <- page_sidebar(
         selected = appvar_values$shf_gfrckdepi,
         multiple = TRUE
       ),
-      checkboxInput("ntprobnp_af", "Separate NT-proBNP by atrial fibrillation"),
-      conditionalPanel(
-        condition = "input.ntprobnp_af == true",
-        p(HTML("NT-proBNP (pg/mL) <b>with</b> atrial fibrillation > 900<br>NT-proBNP (pg/mL) <b>without</b> atrial fibrillation > 300")),
-      ),
       conditionalPanel(
         condition = "input.ntprobnp_af == false",
         selectInput(
@@ -53,6 +48,11 @@ ui <- page_sidebar(
           selected = appvar_values$shf_ntprobnp,
           multiple = TRUE
         )
+      ),
+      checkboxInput("ntprobnp_af", "Separate NT-proBNP by atrial fibrillation"),
+      conditionalPanel(
+        condition = "input.ntprobnp_af == true",
+        p(HTML("NT-proBNP (pg/mL) <b>with</b> atrial fibrillation > 900<br>NT-proBNP (pg/mL) <b>without</b> atrial fibrillation > 300")),
       ),
       selectInput(
         inputId = "bpsys",
@@ -108,9 +108,17 @@ ui <- page_sidebar(
       value = "Information",
       icon = icon("info"),
       p("The displayed information is the last registration / patient in the Swedish Heart Failure Registry (SwedeHF) 2016-2023 with recorded Ejection fraction and discharged alive from hospital (N = 46,636)."),
-      p("The outcomes were derived from the National Patient register (hospitalizations) and The Cause of Death Register (deaths). HF was defined as ICD-10 I110, I130, I132, I255, I420, I423, I425-9, I43, I50, J81, K761, R570 and CV as I, J81, K761, R570, G45."),
-      p("The displayed information is the last registration / patient in the Swedish Heart Failure Registry (SwedeHF) 2016-2023 and discharged alive from hospital."),
-      p("Missing values are imputed with a multivariate imputation algorithm based on random forests (Mayer M (2024). _missRanger: Fast Imputation of Missing Values_. doi:10.32614/CRAN.package.missRanger")
+      p("Missing values are imputed with a multivariate imputation algorithm based on random forests (Mayer M (2024). _missRanger: Fast Imputation of Missing Values_. doi:10.32614/CRAN.package.missRanger"),
+      DT::datatable(vardefs, options = list(
+        paging = FALSE,
+        searching = FALSE,
+        info = FALSE
+      ), rownames = F)
+    ),
+    nav_panel("Contact",
+      value = "Contact",
+      icon = icon("envelope"),
+      p(HTML(paste0("For more information please contact Gianluigi Savarese, ", str_c("<a href=\"mailto:", "gianluigi.savarese@ki.se", "\">", "gianluigi.savarese@ki.se", "</a>"), " or Lina Benson, ", str_c("<a href=\"mailto:", "lina.benson@ki.se", "\">", "lina.benson@ki.se", "</a>"))))
     )
   )
 )
