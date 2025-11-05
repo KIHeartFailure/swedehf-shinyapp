@@ -1,7 +1,8 @@
 source("setup.R")
 
 ui <- page_sidebar(
-  title = h4(tags$img(src = "logo.jpg", width = "75px"), "KI-App: a tool for defining selection criteria for RCTs in heart failure"),
+  #title = h4(tags$img(src = "logo.jpg", width = "75px"), "KI-App: a tool for defining selection criteria for RCTs in heart failure"),
+  title = h4("KI-App: a tool for defining selection criteria for RCTs in heart failure"),
   theme = mytheme,
   sidebar = sidebar(
     width = "30%",
