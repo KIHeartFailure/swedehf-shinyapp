@@ -22,10 +22,6 @@ cache/
 *.pdf
 *.log
 
-# piture files
-*.png
-*.jpg
-
 TODO
 OLD
 checks/
