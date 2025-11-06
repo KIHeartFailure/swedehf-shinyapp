@@ -92,7 +92,8 @@ ui <- page_sidebar(
         padding = 0
       ),
       card(
-        DT::dataTableOutput(outputId = "event")
+        DT::dataTableOutput(outputId = "event"),
+        padding = 0
       )
       # )
     ),
@@ -109,11 +110,14 @@ ui <- page_sidebar(
       icon = icon("info"),
       p("The displayed information is the last registration / patient in the Swedish Heart Failure Registry (SwedeHF) 2016-2023 with recorded Ejection fraction and discharged alive from hospital (N = 46,636)."),
       p("Missing values are imputed with a multivariate imputation algorithm based on random forests (Mayer M (2024). _missRanger: Fast Imputation of Missing Values_. doi:10.32614/CRAN.package.missRanger"),
-      DT::datatable(vardefs, options = list(
-        paging = FALSE,
-        searching = FALSE,
-        info = FALSE
-      ), rownames = F)
+      DT::datatable(
+        vardefs,
+        options = list(
+          paging = FALSE, searching = F, info = F
+        ),
+        rownames = F,
+        escape = F
+      )
     ),
     nav_panel("Contact",
       value = "Contact",
